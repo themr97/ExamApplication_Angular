@@ -1,0 +1,47 @@
+<div class="container">
+    <div *ngIf="mode==='exam'">
+        <div class="display-6" style="padding-bottom: 20px;">Questions</div>
+        <div id="questions" style="padding: 10px;">
+            <div *ngFor="let i of questions;" style="padding: 10px;">
+                <div>{{i.id}}.{{i.q}}</div>
+                <div class="row text-left options">
+                    <div class="col-6" *ngFor="let option of i.options">
+                        <div class="option">
+                            <label class="font-weight-normal" [attr.for]="option.id">
+                                <input id="{{option.id}}" type="checkbox" [(ngModel)]="option.selected"
+                                    (change)="onSelected(i,option)"/> {{option.option}}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="mode==='review'">
+        <div class="display-6" style="padding-bottom: 20px;">Review</div>
+        <div class="col-6" *ngFor="let question of questions;">
+            <div class="p-3 mb-3 {{ isAnswered(question) == 'Answered'? 'bg-success': 'bg-danger' }}">Question
+                {{question.id}} {{ isAnswered(question) }}</div>
+        </div>
+    </div>
+    <div *ngIf="mode==='result'">
+        <div class="display-6" style="padding-bottom: 20px;">Quiz Result</div>
+        <div style="padding: 10px" *ngFor="let question of questions;" >
+            <div class="result-question">
+                <h5> {{question.q}}</h5>
+                <div class="row">
+                    <div class="col-6" *ngFor="let Option of question.options">
+                        <input id="{{Option.id}}" type="checkbox" disabled="disabled" [(ngModel)]="Option.selected" />
+                        {{Option.option}}
+                    </div>
+                </div>
+                <div class="form-control {{ isCorrect(question) == 'Correct'? 'is-valid': 'is-invalid'}}" style="margin: 5px;">Your answer is {{isCorrect(question)}}.</div>
+            </div>
+        </div>
+    </div>
+    <footer class="d-flex justify-content-center">
+        <button type="button" class="btn btn-primary" (click)="mode = 'exam'">Quiz</button>
+        <button type="button" class="btn btn-secondary" (click)="mode='review'">Review</button>
+        <button type="button" class="btn btn-success" (click)="mode='result'">Result</button>
+    </footer>
+</div>
